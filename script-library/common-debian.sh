@@ -217,7 +217,7 @@ if [ ! -f "${USER_RC_PATH}/.bashrc" ] || [ ! -s "${USER_RC_PATH}/.bashrc" ] ; th
     cp  /etc/skel/.bashrc "${USER_RC_PATH}/.bashrc"
 fi
 
-echo Restore user .profile defaults from skeleton file if it doesn't exist or is empty
+echo "Restore user .profile defaults from skeleton file if it doesn't exist or is empty"
 if  [ ! -f "${USER_RC_PATH}/.profile" ] || [ ! -s "${USER_RC_PATH}/.profile" ] ; then
     cp  /etc/skel/.profile "${USER_RC_PATH}/.profile"
 fi
@@ -253,7 +253,7 @@ fi
 EOF
 )"
 
-echo code shim, it fallbacks to code-insiders if code is not available
+echo "code shim, it fallbacks to code-insiders if code is not available"
 cat << 'EOF' > /usr/local/bin/code
 #!/bin/sh
 
@@ -274,7 +274,7 @@ fi
 EOF
 chmod +x /usr/local/bin/code
 
-echo systemctl shim - tells people to use 'service' if systemd is not running
+echo "systemctl shim - tells people to use 'service' if systemd is not running"
 cat << 'EOF' > /usr/local/bin/systemctl
 #!/bin/sh
 set -e
@@ -338,7 +338,7 @@ __zsh_prompt
 EOF
 )"
 
-echo Add notice that Oh My Bash! has been removed from images and how to provide information on how to install manually
+echo "Add notice that Oh My Bash! has been removed from images and how to provide information on how to install manually"
 OMB_README="$(cat \
 <<'EOF'
 "Oh My Bash!" has been removed from this image in favor of a simple shell prompt. If you 
@@ -369,7 +369,7 @@ if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
     RC_SNIPPET_ALREADY_ADDED="true"
 fi
 
-echo Add stub for Oh My Bash!
+echo "Add stub for Oh My Bash!"
 if [ ! -d "${USER_RC_PATH}/.oh-my-bash}" ] && [ "${INSTALL_OH_MYS}" = "true" ]; then
     mkdir -p "${USER_RC_PATH}/.oh-my-bash" "/root/.oh-my-bash"
     echo "${OMB_README}" >> "${USER_RC_PATH}/.oh-my-bash/README.md"
