@@ -164,11 +164,13 @@ fi
 
 # Ensure at least the en_US.UTF-8 UTF-8 locale is available.
 # Common need for both applications and things like the agnoster ZSH theme.
+echo "L1"
 if [ "${LOCALE_ALREADY_SET}" != "true" ] && ! grep -o -E '^\s*en_US.UTF-8\s+UTF-8' /etc/locale.gen > /dev/null; then
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen 
     locale-gen
     LOCALE_ALREADY_SET="true"
 fi
+echo "L2"
 
 # Create or update a non-root user to match UID/GID.
 if id -u ${USERNAME} > /dev/null 2>&1; then
