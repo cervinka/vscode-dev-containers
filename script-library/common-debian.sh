@@ -94,6 +94,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         vim-tiny \
         less \
         jq \
+        inotify-tools \
         lsb-release \
         apt-transport-https \
         dialog \
