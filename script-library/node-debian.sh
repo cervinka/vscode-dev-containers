@@ -27,7 +27,7 @@ rm -f /etc/profile.d/00-restore-env.sh
 echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
-# Determine the appropriate non-root user
+echo Determine the appropriate non-root user
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
@@ -58,7 +58,7 @@ function updaterc() {
     fi
 }
 
-# Ensure apt is in non-interactive to avoid prompts
+echo Ensure apt is in non-interactive to avoid prompts
 export DEBIAN_FRONTEND=noninteractive
 
 # Install curl, apt-transport-https, tar, or gpg if missing
@@ -69,7 +69,7 @@ if ! dpkg -s apt-transport-https curl ca-certificates tar > /dev/null 2>&1 || ! 
     apt-get -y install --no-install-recommends apt-transport-https curl ca-certificates tar gnupg2
 fi
 
-# Install yarn
+echo Install yarn
 if type yarn > /dev/null 2>&1; then
     echo "Yarn already installed."
 else
@@ -80,7 +80,7 @@ else
     apt-get -y install --no-install-recommends yarn
 fi
 
-# Install the specified node version if NVM directory already exists, then exit
+echo Install the specified node version if NVM directory already exists, then exit
 if [ -d "${NVM_DIR}" ]; then
     echo "NVM already installed."
     if [ "${NODE_VERSION}" != "" ]; then
@@ -89,7 +89,7 @@ if [ -d "${NVM_DIR}" ]; then
     exit 0
 fi
 
-# Create nvm group, nvm dir, and set sticky bit
+echo Create nvm group, nvm dir, and set sticky bit
 if ! cat /etc/group | grep -e "^nvm:" > /dev/null 2>&1; then
     groupadd -r nvm
 fi
