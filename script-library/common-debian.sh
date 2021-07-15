@@ -174,7 +174,7 @@ echo "L2"
 
 # Create or update a non-root user to match UID/GID.
 if id -u ${USERNAME} > /dev/null 2>&1; then
-    # User exists, update if needed
+    echo User exists, update if needed
     if [ "${USER_GID}" != "automatic" ] && [ "$USER_GID" != "$(id -G $USERNAME)" ]; then 
         groupmod --gid $USER_GID $USERNAME 
         usermod --gid $USER_GID $USERNAME
@@ -183,7 +183,7 @@ if id -u ${USERNAME} > /dev/null 2>&1; then
         usermod --uid $USER_UID $USERNAME
     fi
 else
-    # Create user
+    echo Create user
     if [ "${USER_GID}" = "automatic" ]; then
         groupadd $USERNAME
     else
@@ -197,6 +197,7 @@ else
 fi
 
 # Add add sudo support for non-root user
+echo add sudo
 if [ "${USERNAME}" != "root" ] && [ "${EXISTING_NON_ROOT_USER}" != "${USERNAME}" ]; then
     echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
     chmod 0440 /etc/sudoers.d/$USERNAME
@@ -204,12 +205,14 @@ if [ "${USERNAME}" != "root" ] && [ "${EXISTING_NON_ROOT_USER}" != "${USERNAME}"
 fi
 
 # ** Shell customization section **
+echo rc path
 if [ "${USERNAME}" = "root" ]; then 
     USER_RC_PATH="/root"
 else
     USER_RC_PATH="/home/${USERNAME}"
 fi
-
+bashrc
+echo 
 # Restore user .bashrc defaults from skeleton file if it doesn't exist or is empty
 if [ ! -f "${USER_RC_PATH}/.bashrc" ] || [ ! -s "${USER_RC_PATH}/.bashrc" ] ; then
     cp  /etc/skel/.bashrc "${USER_RC_PATH}/.bashrc"
@@ -226,6 +229,7 @@ RC_SNIPPET="$(cat << 'EOF'
 if [ -z "${USER}" ]; then export USER=$(whoami); fi
 if [[ "${PATH}" != *"$HOME/.local/bin"* ]]; then export PATH="${PATH}:$HOME/.local/bin"; fi
 
+echo notice
 # Display optional first run image specific notice if configured and terminal is interactive
 if [ -t 1 ] && [[ "${TERM_PROGRAM}" = "vscode" || "${TERM_PROGRAM}" = "codespaces" ]] && [ ! -f "$HOME/.config/vscode-dev-containers/first-run-notice-already-displayed" ]; then
     if [ -f "/usr/local/etc/vscode-dev-containers/first-run-notice.txt" ]; then
