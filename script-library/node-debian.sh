@@ -73,7 +73,7 @@ echo Install yarn
 if type yarn > /dev/null 2>&1; then
     echo "Yarn already installed."
 else
-    echo Import key safely (new method rather than deprecated apt-key approach) and install
+    # Import key safely (new method rather than deprecated apt-key approach) and install
     echo Y1
     echo `wget -qO - https://dl.yarnpkg.com/debian/pubkey.gpg`
     wget -qO - https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
