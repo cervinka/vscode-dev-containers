@@ -211,14 +211,13 @@ if [ "${USERNAME}" = "root" ]; then
 else
     USER_RC_PATH="/home/${USERNAME}"
 fi
-bashrc
-echo 
+echo  bashrc
 # Restore user .bashrc defaults from skeleton file if it doesn't exist or is empty
 if [ ! -f "${USER_RC_PATH}/.bashrc" ] || [ ! -s "${USER_RC_PATH}/.bashrc" ] ; then
     cp  /etc/skel/.bashrc "${USER_RC_PATH}/.bashrc"
 fi
 
-# Restore user .profile defaults from skeleton file if it doesn't exist or is empty
+echo Restore user .profile defaults from skeleton file if it doesn't exist or is empty
 if  [ ! -f "${USER_RC_PATH}/.profile" ] || [ ! -s "${USER_RC_PATH}/.profile" ] ; then
     cp  /etc/skel/.profile "${USER_RC_PATH}/.profile"
 fi
@@ -254,7 +253,7 @@ fi
 EOF
 )"
 
-# code shim, it fallbacks to code-insiders if code is not available
+echo code shim, it fallbacks to code-insiders if code is not available
 cat << 'EOF' > /usr/local/bin/code
 #!/bin/sh
 
@@ -275,7 +274,7 @@ fi
 EOF
 chmod +x /usr/local/bin/code
 
-# systemctl shim - tells people to use 'service' if systemd is not running
+echo systemctl shim - tells people to use 'service' if systemd is not running
 cat << 'EOF' > /usr/local/bin/systemctl
 #!/bin/sh
 set -e
@@ -291,7 +290,7 @@ chmod +x /usr/local/bin/systemctl
 CODESPACES_BASH="$(cat \
 <<'EOF'
 
-# Codespaces bash prompt theme
+echo Codespaces bash prompt theme
 __bash_prompt() {
     local userpart='`export XIT=$? \
         && [ ! -z "${GITHUB_USER}" ] && echo -n "\[\033[0;32m\]@${GITHUB_USER} " || echo -n "\[\033[0;32m\]\u " \
@@ -339,7 +338,7 @@ __zsh_prompt
 EOF
 )"
 
-# Add notice that Oh My Bash! has been removed from images and how to provide information on how to install manually
+echo Add notice that Oh My Bash! has been removed from images and how to provide information on how to install manually
 OMB_README="$(cat \
 <<'EOF'
 "Oh My Bash!" has been removed from this image in favor of a simple shell prompt. If you 
@@ -357,7 +356,7 @@ fi
 EOF
 )"
 
-# Add RC snippet and custom bash prompt
+echo Add RC snippet and custom bash prompt
 if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
     echo "${RC_SNIPPET}" >> /etc/bash.bashrc
     echo "${CODESPACES_BASH}" >> "${USER_RC_PATH}/.bashrc"
@@ -370,7 +369,7 @@ if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
     RC_SNIPPET_ALREADY_ADDED="true"
 fi
 
-# Add stub for Oh My Bash!
+echo Add stub for Oh My Bash!
 if [ ! -d "${USER_RC_PATH}/.oh-my-bash}" ] && [ "${INSTALL_OH_MYS}" = "true" ]; then
     mkdir -p "${USER_RC_PATH}/.oh-my-bash" "/root/.oh-my-bash"
     echo "${OMB_README}" >> "${USER_RC_PATH}/.oh-my-bash/README.md"
@@ -464,7 +463,7 @@ if [ -f "${SCRIPT_DIR}/meta.env" ]; then
     chmod +x /usr/local/bin/devcontainer-info
 fi
 
-# Write marker file
+echo Write marker file
 mkdir -p "$(dirname "${MARKER_FILE}")"
 echo -e "\
     PACKAGES_ALREADY_INSTALLED=${PACKAGES_ALREADY_INSTALLED}\n\
